@@ -1,0 +1,22 @@
+[
+  {
+    "name": "시그니처 프리미엄 텀블러",
+    "originalPrice": 29000,
+    "salePrice": 19800,
+    "costPrice": 9500,
+    "specVol": "500ml",
+    "specMat": "스테인리스 304",
+    "specColor": "스카이블루",
+    "specQty": "본품 1개 + 전용 파우치 1개",
+    "startDate": 1780412400000,
+    "endDate": 1780757999000,
+    "thumbs": [
+      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23e2e8f0'/%3E%3Ctext x='400' y='310' fill='%2394a3b8' font-family='system-ui' font-size='24' text-anchor='middle' font-weight='700'%3E이미지 준비중%3C/text%3E%3C/svg%3E"
+    ],
+    "details": [
+      "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23e2e8f0'/%3E%3Ctext x='400' y='310' fill='%2394a3b8' font-family='system-ui' font-size='24' text-anchor='middle' font-weight='700'%3E이미지 준비중%3C/text%3E%3C/svg%3E"
+    ],
+    "id": "p1780494863560",
+    "createdAt": 1780494863560
+  }
+]
