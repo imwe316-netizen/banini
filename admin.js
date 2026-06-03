@@ -159,6 +159,7 @@
         const endDate = new Date(`${yEnd}-${mEnd}-${dEnd}T23:59:59`).getTime();
 
         const pData = {
+            category: fd.get('category'),
             name: fd.get('name').trim(),
             originalPrice: Number(fd.get('originalPrice')),
             salePrice: Number(fd.get('salePrice')),
@@ -208,6 +209,7 @@
         renderPreviews(document.getElementById('thumbPreviews'), document.getElementById('thumbCounter'), uploadedThumbs, 5);
         renderPreviews(document.getElementById('detailPreviews'), document.getElementById('detailCounter'), uploadedDetails, 15);
         editingProductId = null;
+        updateLabels('생활용품');
         document.getElementById('productSubmitBtn').textContent = '제품 등록하기';
         document.getElementById('cancelEditBtn').style.display = 'none';
     }
@@ -222,7 +224,7 @@
             if (now >= p.startDate && now <= p.endDate) { status = '진행중'; badge = 'badge-success'; }
             else if (now > p.endDate) { status = '종료'; badge = 'badge-warning'; }
             return `<tr>
-      <td><strong>${p.name}</strong></td>
+      <td><strong>${p.name}</strong> <span class="badge badge-gray" style="font-size:10px;padding:2px 6px;margin-left:4px">${p.category || '생활용품'}</span></td>
       <td>${formatPrice(p.salePrice)}</td>
       <td>${formatPrice(p.costPrice)}</td>
       <td>썸네일 ${p.thumbs?.length || 0}장 / 상세 ${p.details?.length || 0}장</td>
@@ -241,6 +243,8 @@
         editingProductId = id;
         const form = document.getElementById('productForm');
 
+        form.category.value = p.category || '생활용품';
+        updateLabels(p.category || '생활용품');
         form.name.value = p.name;
         form.originalPrice.value = p.originalPrice;
         form.salePrice.value = p.salePrice;
@@ -432,8 +436,34 @@
         overlay.onclick = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
     }
 
+    function updateLabels(category) {
+        const vol = document.getElementById('label-specVol');
+        const mat = document.getElementById('label-specMat');
+        const col = document.getElementById('label-specColor');
+        if (!vol || !mat || !col) return;
+
+        if (category === '식품' || category === '건강기능식품') {
+            vol.textContent = '중량 *';
+            mat.textContent = '원산지 *';
+            col.textContent = '제품종류 *';
+        } else {
+            vol.textContent = '용량 *';
+            mat.textContent = '소재 *';
+            col.textContent = '색상 *';
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
         populateDates(); startClock(); renderAdminAll();
+        
+        const catSelect = document.querySelector('select[name="category"]');
+        if (catSelect) {
+            catSelect.addEventListener('change', (e) => {
+                updateLabels(e.target.value);
+            });
+            updateLabels(catSelect.value);
+        }
+        
         setupImageUpload(document.getElementById('thumbImagesInput'), document.getElementById('thumbPreviews'), document.getElementById('thumbCounter'), uploadedThumbs, 5);
         setupImageUpload(document.getElementById('detailImagesInput'), document.getElementById('detailPreviews'), document.getElementById('detailCounter'), uploadedDetails, 15);
     });

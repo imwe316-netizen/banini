@@ -67,45 +67,53 @@
                             <form id="productForm" class="form-grid">
                                 <div class="form-grid two">
                                     <div class="form-field">
-                                        <label class="form-label">상품명 *</label>
-                                        <input class="form-input" name="name" required placeholder="예: 프리미엄 텀블러 500ml 단품 세트">
+                                        <label class="form-label">카테고리 *</label>
+                                        <select name="category" class="form-select" required>
+                                            <option value="생활용품">생활용품</option>
+                                            <option value="식품">식품</option>
+                                            <option value="건강기능식품">건강기능식품</option>
+                                        </select>
                                     </div>
+                                    <div class="form-field">
+                                        <label class="form-label">상품명 *</label>
+                                        <input class="form-input" name="name" required>
+                                    </div>
+                                </div>
+                                <div class="form-grid two">
                                     <div class="form-field">
                                         <label class="form-label">소비자가 (원) *</label>
-                                        <input class="form-input" name="originalPrice" type="number" min="0" required placeholder="29000">
+                                        <input class="form-input" name="originalPrice" type="number" min="0" required>
                                     </div>
-                                </div>
-                                <div class="form-grid two">
                                     <div class="form-field">
                                         <label class="form-label">판매가 (원) *</label>
-                                        <input class="form-input" name="salePrice" type="number" min="0" required placeholder="18900">
+                                        <input class="form-input" name="salePrice" type="number" min="0" required>
                                     </div>
+                                </div>
+                                <div class="form-grid two">
                                     <div class="form-field">
                                         <label class="form-label">제품원가 (원) *</label>
-                                        <input class="form-input" name="costPrice" type="number" min="0" required placeholder="9500">
+                                        <input class="form-input" name="costPrice" type="number" min="0" required>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label" id="label-specVol">용량 *</label>
+                                        <input class="form-input" name="specVol" required>
                                     </div>
                                 </div>
                                 <div class="form-grid two">
                                     <div class="form-field">
-                                        <label class="form-label">용량 *</label>
-                                        <input class="form-input" name="specVol" required placeholder="500ml">
+                                        <label class="form-label" id="label-specMat">소재 *</label>
+                                        <input class="form-input" name="specMat" required>
                                     </div>
                                     <div class="form-field">
-                                        <label class="form-label">소재 *</label>
-                                        <input class="form-input" name="specMat" required placeholder="스테인리스 316">
+                                        <label class="form-label" id="label-specColor">색상 *</label>
+                                        <input class="form-input" name="specColor" required>
                                     </div>
                                 </div>
                                 <div class="form-grid two">
-                                    <div class="form-field">
-                                        <label class="form-label">색상 *</label>
-                                        <input class="form-input" name="specColor" required placeholder="코랄핑크 / 스카이블루">
-                                    </div>
                                     <div class="form-field">
                                         <label class="form-label">제품구성 *</label>
-                                        <input class="form-input" name="specQty" required placeholder="예: 본품 1개 + 전용 파우치 1개">
+                                        <input class="form-input" name="specQty" required>
                                     </div>
-                                </div>
-                                <div class="form-grid two">
                                     <div class="form-field">
                                         <label class="form-label">시작일 (자정 00:00 자동시작) *</label>
                                         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
@@ -114,6 +122,8 @@
                                             <select name="startDay" class="form-select" required></select>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="form-grid two">
                                     <div class="form-field">
                                         <label class="form-label">종료일 (밤 23:59:59 자동마감) *</label>
                                         <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
@@ -122,6 +132,7 @@
                                             <select name="endDay" class="form-select" required></select>
                                         </div>
                                     </div>
+                                    <div class="form-field"></div>
                                 </div>
 
                                 <div class="image-upload-box">

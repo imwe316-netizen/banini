@@ -42,6 +42,11 @@
         const tList = active.thumbs && active.thumbs.length ? active.thumbs : [PLACEHOLDER];
         const dList = active.details && active.details.length ? active.details : [];
 
+        const isFood = active.category === '식품' || active.category === '건강기능식품';
+        const labelVol = isFood ? '중량' : '용량';
+        const labelMat = isFood ? '원산지' : '소재';
+        const labelColor = isFood ? '제품종류' : '색상';
+
         container.innerHTML = `
     <div class="product-single">
       <div class="product-main">
@@ -60,9 +65,9 @@
             
             <table class="specs-table">
               <tbody>
-                <tr><th>용량</th><td>${active.specVol || '-'}</td></tr>
-                <tr><th>소재</th><td>${active.specMat || '-'}</td></tr>
-                <tr><th>색상</th><td>${active.specColor || '-'}</td></tr>
+                <tr><th>${labelVol}</th><td>${active.specVol || '-'}</td></tr>
+                <tr><th>${labelMat}</th><td>${active.specMat || '-'}</td></tr>
+                <tr><th>${labelColor}</th><td>${active.specColor || '-'}</td></tr>
                 <tr><th>제품구성</th><td>${active.specQty || '-'}</td></tr>
               </tbody>
             </table>
