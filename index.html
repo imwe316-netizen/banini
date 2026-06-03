@@ -1,0 +1,1632 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>비니비니 공구방 - 매주 공동구매 플랫폼</title>
+    <style>
+        :root {
+            --bg: #f8fafc;
+            --card: #fff;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --text: #0f172a;
+            --muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --radius: 16px;
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, .06), 0 2px 4px -1px rgba(0, 0, 0, .04);
+        }
+
+        * {
+            box-sizing: border-box
+        }
+
+        input[type="datetime-local"],
+        input[type="date"],
+        input[type="time"] {
+            color: #0f172a !important;
+            -webkit-text-fill-color: #0f172a !important;
+        }
+
+        input[type="datetime-local"]::-webkit-datetime-edit,
+        input[type="datetime-local"]::-webkit-datetime-edit-text,
+        input[type="datetime-local"]::-webkit-datetime-edit-month-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-day-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-year-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-hour-field,
+        input[type="datetime-local"]::-webkit-datetime-edit-minute-field {
+            color: #0f172a !important;
+        }
+
+        .modal,
+        .modal-content {
+            color-scheme: light;
+        }
+
+        html,
+        body {
+            height: 100%
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased
+        }
+
+        .container {
+            max-width: 1160px;
+            margin: 0 auto;
+            padding: 0 20px
+        }
+
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: rgba(255, 255, 255, .85);
+            backdrop-filter: saturate(180%) blur(12px);
+            border-bottom: 1px solid var(--border)
+        }
+
+        .header-inner {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 64px;
+            gap: 16px
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 20px;
+            letter-spacing: -.3px
+        }
+
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--primary), #60a5fa);
+            display: grid;
+            place-items: center;
+            color: white;
+            font-weight: 900
+        }
+
+        .toggle-group {
+            display: flex;
+            background: #e2e8f0;
+            padding: 4px;
+            border-radius: 12px
+        }
+
+        .toggle-btn {
+            padding: 8px 16px;
+            border: 0;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: .2s;
+            font-size: 14px
+        }
+
+        .toggle-btn.active {
+            background: white;
+            color: var(--primary);
+            box-shadow: var(--shadow)
+        }
+
+        .notice-banner {
+            background: linear-gradient(90deg, #1e40af, #2563eb);
+            color: white
+        }
+
+        .notice-banner .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 20px;
+            gap: 12px;
+            flex-wrap: wrap
+        }
+
+        .kst-clock {
+            background: rgba(255, 255, 255, .15);
+            padding: 6px 12px;
+            border-radius: 999px;
+            font-variant-numeric: tabular-nums;
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .subnav {
+            display: flex;
+            gap: 8px;
+            padding: 16px 20px 0
+        }
+
+        .subnav-btn {
+            padding: 10px 16px;
+            border: 1px solid var(--border);
+            background: white;
+            border-radius: 999px;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .subnav-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary)
+        }
+
+        .page {
+            padding-bottom: 80px
+        }
+
+        .product-single {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            margin-top: 12px
+        }
+
+        .product-main {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 0
+        }
+
+        .product-image {
+            padding: 12px;
+            background: #f8fafc
+        }
+
+        .product-info {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        @media(min-width:768px) {
+            .product-image {
+                padding: 20px
+            }
+
+            .product-info {
+                padding: 24px
+            }
+
+            .product-main {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column
+        }
+
+        .card-pad {
+            padding: 16px
+        }
+
+        @media(min-width:768px) {
+            .card-pad {
+                padding: 24px
+            }
+        }
+
+        .gallery-main {
+            aspect-ratio: 4/3;
+            background: #f1f5f9;
+            display: grid;
+            place-items: center;
+            overflow: hidden
+        }
+
+        .gallery-main img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .gallery-thumbs {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            overflow: auto
+        }
+
+        .thumb {
+            width: 72px;
+            height: 72px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid transparent;
+            cursor: pointer;
+            flex-shrink: 0;
+            background: #f1f5f9;
+            padding: 0
+        }
+
+        .thumb.active {
+            border-color: var(--primary)
+        }
+
+        .thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .product-title {
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.25;
+            margin: 0 0 8px;
+            letter-spacing: -.5px
+        }
+
+        @media(min-width:768px) {
+            .product-title {
+                font-size: 28px
+            }
+        }
+
+        .price-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin: 4px 0 12px
+        }
+
+        .price-original {
+            color: var(--muted);
+            text-decoration: line-through;
+            font-size: 16px
+        }
+
+        .price-sale {
+            font-size: 22px;
+            font-weight: 800;
+            color: var(--primary);
+            letter-spacing: -.5px
+        }
+
+        @media(min-width:768px) {
+            .price-sale {
+                font-size: 28px
+            }
+        }
+
+        .discount-badge {
+            background: #fee2e2;
+            color: #b91c1c;
+            padding: 2px 8px;
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 13px
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            margin: 12px 0;
+            background: #f8fafc;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border)
+        }
+
+        .specs-table th,
+        .specs-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+            text-align: left
+        }
+
+        .specs-table tr:last-child th,
+        .specs-table tr:last-child td {
+            border-bottom: 0
+        }
+
+        .specs-table th {
+            width: 100px;
+            color: var(--muted);
+            font-weight: 600;
+            background: #f1f5f9
+        }
+
+        .buy-btn {
+            width: 100%;
+            padding: 16px;
+            background: var(--primary);
+            color: white;
+            border: 0;
+            border-radius: 14px;
+            font-size: 18px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .2s;
+            box-shadow: 0 8px 20px -8px rgba(37, 99, 235, .5);
+            margin-top: auto
+        }
+
+        .buy-btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px)
+        }
+
+        .buy-btn:disabled {
+            background: #94a3b8;
+            box-shadow: none;
+            transform: none;
+            cursor: not-allowed
+        }
+
+        .detail-section {
+            margin-top: 24px
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 800;
+            margin: 0 0 16px;
+            border-bottom: 2px solid var(--text);
+            padding-bottom: 8px
+        }
+
+        .detail-images-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            margin-top: 20px;
+            align-items: center
+        }
+
+        .detail-images-wrap img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05)
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 80px 20px;
+            color: var(--muted)
+        }
+
+        .table-wrap {
+            overflow: auto;
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border)
+        }
+
+        table.admin-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+            min-width: 720px
+        }
+
+        .admin-table th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: 700;
+            color: var(--muted);
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap
+        }
+
+        .admin-table td {
+            padding: 12px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700
+        }
+
+        .badge-success {
+            background: #dcfce7;
+            color: #166534
+        }
+
+        .badge-gray {
+            background: #f1f5f9;
+            color: #475569
+        }
+
+        .badge-warning {
+            background: #fef3c7;
+            color: #92400e
+        }
+
+        .admin-layout {
+            display: flex;
+            min-height: calc(100vh - 64px)
+        }
+
+        .admin-sidebar {
+            width: 240px;
+            background: white;
+            border-right: 1px solid var(--border);
+            padding: 16px;
+            flex-shrink: 0
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 4px
+        }
+
+        .admin-nav-btn {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 0;
+            background: transparent;
+            text-align: left;
+            font-weight: 600;
+            color: var(--muted);
+            cursor: pointer;
+            width: 100%;
+            font-size: 14px
+        }
+
+        .admin-nav-btn.active,
+        .admin-nav-btn:hover {
+            background: #eff6ff;
+            color: var(--primary)
+        }
+
+        .admin-main {
+            flex: 1;
+            padding: 24px;
+            max-width: 1200px;
+            width: 100%
+        }
+
+        .admin-view {
+            display: none
+        }
+
+        .admin-view.active {
+            display: block
+        }
+
+        .dash-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px
+        }
+
+        @media(min-width:900px) {
+            .dash-grid {
+                grid-template-columns: repeat(4, 1fr)
+            }
+        }
+
+        .dash-card {
+            background: white;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow)
+        }
+
+        .dash-label {
+            font-size: 13px;
+            color: var(--muted);
+            margin-bottom: 6px
+        }
+
+        .dash-value {
+            font-size: 26px;
+            font-weight: 800;
+            letter-spacing: -.5px
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 16px
+        }
+
+        @media(min-width:720px) {
+            .form-grid.two {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px
+        }
+
+        .form-label {
+            font-weight: 600;
+            font-size: 14px
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            font-size: 15px;
+            font-family: inherit;
+            background: white;
+            transition: .2s
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, .15)
+        }
+
+        .image-upload-box {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 16px
+        }
+
+        @media(min-width:720px) {
+            .image-upload-box {
+                grid-template-columns: 1fr 1fr
+            }
+        }
+
+        .image-upload {
+            border: 2px dashed var(--border);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            background: #f8fafc;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .image-upload:hover {
+            border-color: var(--primary);
+            background: #eff6ff
+        }
+
+        .image-previews {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+            margin-top: 12px
+        }
+
+        .preview-item {
+            aspect-ratio: 4/3;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+            background: #f1f5f9
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .preview-remove {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0, 0, 0, .6);
+            color: white;
+            border: 0;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 14px
+        }
+
+        .btn-primary {
+            padding: 12px 20px;
+            background: var(--primary);
+            color: white;
+            border: 0;
+            border-radius: 12px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: .2s
+        }
+
+        .btn-secondary {
+            padding: 10px 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 100;
+            backdrop-filter: blur(4px)
+        }
+
+        .modal.show {
+            display: flex
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 20px;
+            max-width: 520px;
+            width: 100%;
+            max-height: 90vh;
+            overflow: auto
+        }
+
+        .modal-head {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center
+        }
+
+        .modal-body {
+            padding: 24px
+        }
+
+        .modal-foot {
+            padding: 16px 24px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end
+        }
+
+        .close-btn {
+            background: transparent;
+            border: 0;
+            font-size: 24px;
+            cursor: pointer;
+            color: var(--muted)
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: #0f172a;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 999px;
+            font-weight: 600;
+            opacity: 0;
+            transition: .3s;
+            z-index: 200
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        .footer {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--muted);
+            font-size: 13px;
+            border-top: 1px solid var(--border);
+            background: white
+        }
+
+        .past-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-top: 16px
+        }
+
+        @media(min-width:640px) {
+            .past-grid {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        .past-card {
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow)
+        }
+
+        .past-card-img {
+            aspect-ratio: 4/3;
+            background: #f1f5f9
+        }
+
+        .past-card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover
+        }
+
+        .past-card-body {
+            padding: 14px
+        }
+
+        .past-card-name {
+            font-weight: 700;
+            font-size: 15px;
+            margin-bottom: 8px
+        }
+
+        .past-card-price {
+            font-weight: 800;
+            color: var(--primary)
+        }
+
+        @media(max-width:768px) {
+            .admin-sidebar {
+                position: fixed;
+                left: -260px;
+                top: 64px;
+                bottom: 0;
+                z-index: 30;
+                transition: .3s
+            }
+
+            .admin-sidebar.open {
+                left: 0
+            }
+
+            .image-previews {
+                grid-template-columns: repeat(3, 1fr)
+            }
+        }
+
+        .m-menu {
+            display: none
+        }
+
+        @media(max-width:768px) {
+            .m-menu {
+                display: grid;
+                place-items: center;
+                width: 40px;
+                height: 40px;
+                font-size: 24px;
+                background: #f1f5f9;
+                border: 0;
+                border-radius: 10px;
+                margin-right: 8px
+            }
+        }
+
+        .admin-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, .4);
+            z-index: 29;
+            display: none
+        }
+
+        .admin-overlay.show {
+            display: block
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="container header-inner">
+                <button id="mMenu" class="m-menu">☰</button>
+                <div class="brand"><span>비니비니 공구방</span></div>
+                <div class="toggle-group">
+                    <button id="toggle-public" class="toggle-btn active">일반 페이지</button>
+                    <button id="toggle-admin" class="toggle-btn">관리자 페이지</button>
+                </div>
+            </div>
+        </header>
+
+        <div id="public-page" class="page">
+            <div class="notice-banner">
+                <div class="container"><strong>매주 수요일 00:00 ~ 토요일 23:59 (KST) 접수</strong><span class="kst-clock"
+                        id="kst-time">-</span></div>
+            </div>
+            <nav class="subnav container">
+                <button data-tab="active" class="subnav-btn active">진행중 공구</button>
+                <button data-tab="past" class="subnav-btn">지난 공구</button>
+            </nav>
+            <section id="public-active" class="container"></section>
+            <section id="public-past" class="container" hidden>
+                <div style="margin-top:24px">
+                    <h2 class="section-title">지난 공동구매</h2>
+                    <div class="past-grid" id="pastCardsGrid"></div>
+                </div>
+            </section>
+        </div>
+
+        <div id="admin-page" class="page" hidden>
+            <div class="admin-layout">
+                <div class="admin-overlay" id="adminOverlay"></div>
+                <aside class="admin-sidebar" id="adminSidebar">
+                    <nav class="admin-nav">
+                        <button class="admin-nav-btn active" data-view="dashboard">대시보드</button>
+                        <button class="admin-nav-btn" data-view="register">제품등록</button>
+                        <button class="admin-nav-btn" data-view="past">지난공구</button>
+                        <button class="admin-nav-btn" data-view="orders">주문관리</button>
+                        <button class="admin-nav-btn" data-view="settle">정산</button>
+                    </nav>
+                </aside>
+                <main class="admin-main">
+                    <div id="admin-dashboard" class="admin-view active">
+                        <h1 style="font-size:24px;font-weight:800;margin:0 0 12px">대시보드</h1>
+                        <div id="kstDebug"
+                            style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:12px;font-size:13px;margin-bottom:16px">
+                        </div>
+                        <div id="nextScheduleCard" class="card card-pad" style="margin-bottom:20px"></div>
+                        <div class="dash-grid">
+                            <div class="dash-card">
+                                <div class="dash-label">총 매출</div>
+                                <div class="dash-value" id="dash-sales">0원</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="dash-label">진행중</div>
+                                <div class="dash-value" id="dash-active">0개</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="dash-label">대기 주문</div>
+                                <div class="dash-value" id="dash-pending">0건</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="dash-label">총 주문 개수</div>
+                                <div class="dash-value" id="dash-qty">0개</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-register" class="admin-view">
+                        <h1 style="font-size:24px;font-weight:800;margin:0 0 20px">제품 등록</h1>
+                        <div class="card card-pad">
+                            <form id="productForm" class="form-grid">
+                                <div class="form-grid two">
+                                    <div class="form-field"><label class="form-label">상품명 *</label><input
+                                            class="form-input" name="name" required
+                                            placeholder="예: 프리미엄 텀블러 500ml 단품 세트"></div>
+                                    <div class="form-field"><label class="form-label">소비자가 (원) *</label><input
+                                            class="form-input" name="originalPrice" type="number" min="0" required
+                                            placeholder="29000"></div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field"><label class="form-label">판매가 (원) *</label><input
+                                            class="form-input" name="salePrice" type="number" min="0" required
+                                            placeholder="18900"></div>
+                                    <div class="form-field"><label class="form-label">제품원가 (원) *</label><input
+                                            class="form-input" name="costPrice" type="number" min="0" required
+                                            placeholder="9500"></div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field"><label class="form-label">용량 *</label><input
+                                            class="form-input" name="specVol" required placeholder="500ml"></div>
+                                    <div class="form-field"><label class="form-label">소재 *</label><input
+                                            class="form-input" name="specMat" required placeholder="스테인리스 316"></div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field"><label class="form-label">색상 *</label><input
+                                            class="form-input" name="specColor" required placeholder="코랄핑크 / 스카이블루">
+                                    </div>
+                                    <div class="form-field"><label class="form-label">제품구성 *</label><input
+                                            class="form-input" name="specQty" required
+                                            placeholder="예: 본품 1개 + 전용 파우치 1개"></div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field">
+                                        <label class="form-label">시작일 (자정 00:00 자동시작) *</label>
+                                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                                            <select name="startYear" class="form-select" required></select>
+                                            <select name="startMonth" class="form-select" required></select>
+                                            <select name="startDay" class="form-select" required></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">종료일 (밤 23:59:59 자동마감) *</label>
+                                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                                            <select name="endYear" class="form-select" required></select>
+                                            <select name="endMonth" class="form-select" required></select>
+                                            <select name="endDay" class="form-select" required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="image-upload-box">
+                                    <div class="form-field">
+                                        <label class="form-label">썸네일 이미지 <span id="thumbCounter"
+                                                style="font-weight:400;color:var(--muted)">0/5</span> *</label>
+                                        <label class="image-upload">
+                                            <input id="thumbImagesInput" type="file" accept=".jpg,.jpeg,.png,.webp"
+                                                multiple hidden>
+                                            <div>클릭하여 썸네일 등록 (최대 5장)</div>
+                                        </label>
+                                        <div id="thumbPreviews" class="image-previews"></div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">상품 상세 이미지 <span id="detailCounter"
+                                                style="font-weight:400;color:var(--muted)">0/15</span> *</label>
+                                        <label class="image-upload">
+                                            <input id="detailImagesInput" type="file" accept=".jpg,.jpeg,.png,.webp"
+                                                multiple hidden>
+                                            <div>클릭하여 상세이미지 등록 (최대 15장)</div>
+                                        </label>
+                                        <div id="detailPreviews" class="image-previews"></div>
+                                    </div>
+                                </div>
+
+                                <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+                                    <button type="button" id="cancelEditBtn" class="btn-secondary"
+                                        style="display:none">취소</button>
+                                    <button type="submit" class="btn-primary" id="productSubmitBtn">제품 등록하기</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card card-pad" style="margin-top:24px">
+                            <h3 style="margin:0 0 16px;font-weight:800">등록된 상품 목록</h3>
+                            <div class="table-wrap">
+                                <table class="admin-table" id="adminProductListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>상품명</th>
+                                            <th>판매가</th>
+                                            <th>원가</th>
+                                            <th>썸네일/상세</th>
+                                            <th>상태</th>
+                                            <th>액션</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-past" class="admin-view">
+                        <h1 style="font-size:24px;font-weight:800;margin:0 0 20px">지난 공구</h1>
+                        <div class="table-wrap">
+                            <table class="admin-table" id="adminPastTable">
+                                <thead>
+                                    <tr>
+                                        <th>상품명</th>
+                                        <th>기간</th>
+                                        <th>판매가</th>
+                                        <th>원가</th>
+                                        <th>판매수량</th>
+                                        <th>상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="admin-orders" class="admin-view">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                            <h1 style="font-size:24px;font-weight:800;margin:0">주문 관리</h1>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="admin-table" id="adminOrdersTable">
+                                <thead>
+                                    <tr>
+                                        <th>주문일시</th>
+                                        <th>상품</th>
+                                        <th>주문자</th>
+                                        <th>입금자명</th>
+                                        <th>연락처</th>
+                                        <th>수량</th>
+                                        <th>금액</th>
+                                        <th>입금상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="admin-settle" class="admin-view">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                            <h1 style="font-size:24px;font-weight:800;margin:0">정산</h1>
+                            <div
+                                style="background:white;padding:10px 16px;border-radius:12px;border:1px solid var(--border)">
+                                총 이익 <strong id="totalProfit"
+                                    style="font-size:20px;color:var(--primary);margin-left:8px">0원</strong></div>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="admin-table" id="settleTable">
+                                <thead>
+                                    <tr>
+                                        <th>상품명</th>
+                                        <th>판매수량</th>
+                                        <th>매출</th>
+                                        <th>이익</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <footer class="footer">© 2026 비니비니 공구방 • 매주 공동구매 플랫폼</footer>
+    </div>
+
+    <div id="purchaseModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-head">
+                <h3 style="margin:0;font-weight:800;font-size:20px">구매하기</h3><button class="close-btn"
+                    onclick="closePurchaseModal()">×</button>
+            </div>
+            <form id="orderForm">
+                <div class="modal-body form-grid">
+                    <div class="form-grid two">
+                        <div class="form-field"><label class="form-label">이름 *</label><input class="form-input"
+                                name="name" required placeholder="홍길동"></div>
+                        <div class="form-field"><label class="form-label">연락처 *</label><input class="form-input"
+                                name="phone" required placeholder="010-0000-0000"></div>
+                    </div>
+                    <div class="form-field"><label class="form-label">주소 *</label><input class="form-input"
+                            name="address" required placeholder="서울시 강남구 테헤란로"></div>
+                    <div class="form-grid two">
+                        <div class="form-field"><label class="form-label">수량 *</label><input class="form-input"
+                                name="qty" type="number" min="1" value="1" required></div>
+                        <div class="form-field"><label class="form-label">입금자명 *</label><input class="form-input"
+                                name="depositor" required placeholder="통장에 표시될 이름"></div>
+                    </div>
+                </div>
+                <div class="modal-foot"><button type="button" class="btn-secondary"
+                        onclick="closePurchaseModal()">취소</button><button type="submit" class="btn-primary">주문
+                        확정</button></div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+        (() => {
+            const PLACEHOLDER = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23e2e8f0'/%3E%3Ctext x='400' y='310' fill='%2394a3b8' font-family='system-ui' font-size='24' text-anchor='middle' font-weight='700'%3E이미지 준비중%3C/text%3E%3C/svg%3E`;
+
+            function getKSTNow() { return new Date(Date.now() + 9 * 3600 * 1000); }
+            const pad = n => String(n).padStart(2, '0');
+            function formatKST(d) { const days = ['일', '월', '화', '수', '목', '금', '토']; return `${d.getUTCFullYear()}-${pad(d.getUTCMonth() + 1)}-${pad(d.getUTCDate())} (${days[d.getUTCDay()]}) ${pad(d.getUTCHours())}:${pad(d.getUTCMinutes())}:${pad(d.getUTCSeconds())}`; }
+            const formatPrice = n => (n || 0).toLocaleString('ko-KR') + '원';
+
+            function getThisWeekWindow() {
+                const k = getKSTNow(); const day = k.getUTCDay(); const sinceWed = (day - 3 + 7) % 7;
+                const wed = new Date(k); wed.setUTCDate(k.getUTCDate() - sinceWed); wed.setUTCHours(0, 0, 0, 0);
+                const sat = new Date(wed); sat.setUTCDate(wed.getUTCDate() + 3); sat.setUTCHours(23, 59, 59, 999);
+                return { wed, sat };
+            }
+
+            let uploadedThumbs = [];
+            let uploadedDetails = [];
+            let editingProductId = null;
+            let currentActive = null;
+
+            function initData() {
+                if (!localStorage.getItem('kg_products')) {
+                    const win = getThisWeekWindow();
+                    const products = [
+                        {
+                            id: 'demo1',
+                            name: '시그니처 프리미엄 텀블러',
+                            salePrice: 18900, costPrice: 9500, originalPrice: 29000,
+                            specVol: '500ml', specMat: '스테인리스 316', specColor: '코랄핑크 / 스카이블루', specQty: '본품 1개 + 전용 파우치 1개',
+                            thumbs: [PLACEHOLDER],
+                            details: [PLACEHOLDER, PLACEHOLDER],
+                            startDate: win.wed.getTime(), endDate: win.sat.getTime(), createdAt: Date.now()
+                        }
+                    ];
+                    localStorage.setItem('kg_products', JSON.stringify(products));
+                }
+                if (!localStorage.getItem('kg_orders')) {
+                    localStorage.setItem('kg_orders', JSON.stringify([]));
+                }
+            }
+
+            function startClock() {
+                const el = document.getElementById('kst-time'); if (!el) return;
+                const tick = () => {
+                    el.textContent = formatKST(getKSTNow());
+                    if (!document.getElementById('admin-page').hidden && document.getElementById('admin-dashboard').classList.contains('active')) {
+                        updateDashboardSchedule();
+                    }
+                }; tick(); setInterval(tick, 1000);
+            }
+
+            function formatDDayString(diffMs) {
+                const days = Math.floor(diffMs / (24 * 3600 * 1000));
+                const rem = diffMs % (24 * 3600 * 1000);
+                const hours = Math.floor(rem / (3600 * 1000));
+                const mins = Math.floor((rem % (3600 * 1000)) / (60 * 1000));
+                const secs = Math.floor((rem % (60 * 1000)) / 1000);
+
+                if (days > 0) {
+                    return `<span style="color:inherit">${days}일</span> ${hours}시간 ${mins}분 ${secs}초`;
+                }
+                return `${hours}시간 ${mins}분 ${secs}초`;
+            }
+
+            function updateDashboardSchedule() {
+                const card = document.getElementById('nextScheduleCard');
+                if (!card) return;
+
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const now = getKSTNow().getTime();
+                const activeProd = products.find(p => now >= p.startDate && now <= p.endDate);
+
+                if (activeProd) {
+                    const diff = activeProd.endDate - now;
+                    const timeStr = formatDDayString(diff);
+
+                    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span class="badge badge-success" style="margin-bottom:6px">진행중 공구</span>
+          <h4 style="margin:4px 0; font-size:16px; font-weight:800;">${activeProd.name}</h4>
+          <p style="margin:2px 0 0; font-size:13px; color:var(--muted)">마감일시: ${formatKST(new Date(activeProd.endDate))}</p>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px; color:var(--danger); font-weight:700">마감까지 남은 시간</div>
+          <div style="font-size:22px; font-weight:800; color:var(--danger); font-variant-numeric:tabular-nums">${timeStr}</div>
+        </div>
+      </div>
+    `;
+                    return;
+                }
+
+                const upcomingProd = products.filter(p => p.startDate > now).sort((a, b) => a.startDate - b.startDate)[0];
+
+                if (upcomingProd) {
+                    const diff = upcomingProd.startDate - now;
+                    const timeStr = formatDDayString(diff);
+
+                    card.innerHTML = `
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+          <span class="badge badge-gray" style="margin-bottom:6px">오픈 대기중</span>
+          <h4 style="margin:4px 0; font-size:16px; font-weight:800;">${upcomingProd.name}</h4>
+          <p style="margin:2px 0 0; font-size:13px; color:var(--muted)">시작일시: ${formatKST(new Date(upcomingProd.startDate))}</p>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:12px; color:var(--primary); font-weight:700">오픈까지 남은 시간</div>
+          <div style="font-size:22px; font-weight:800; color:var(--primary); font-variant-numeric:tabular-nums">${timeStr}</div>
+        </div>
+      </div>
+    `;
+                    return;
+                }
+
+                card.innerHTML = `
+    <div style="text-align:center; color:var(--muted); padding:4px 0; font-size:14px;">
+      💡 예정되거나 진행 중인 공구 일정이 없습니다. <strong>'제품등록'</strong> 탭에서 새 상품의 공구 기간을 등록해 주세요.
+    </div>
+  `;
+            }
+
+            function renderPublic() {
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const now = getKSTNow().getTime();
+                const active = products.find(p => now >= p.startDate && now <= p.endDate) || products[0];
+                currentActive = active;
+                const container = document.getElementById('public-active');
+                if (!container) return;
+                if (!active) {
+                    container.innerHTML = `<div class="empty-state"><h3>현재 진행중인 공구가 없습니다</h3></div>`;
+                    return;
+                }
+                const discount = active.originalPrice ? Math.round((1 - active.salePrice / active.originalPrice) * 100) : 0;
+                const tList = active.thumbs && active.thumbs.length ? active.thumbs : [PLACEHOLDER];
+                const dList = active.details && active.details.length ? active.details : [];
+
+                container.innerHTML = `
+    <div class="product-single">
+      <div class="product-main">
+        <div class="product-image">
+          <div class="gallery-main"><img id="mainImg" src="${tList[0]}" alt=""></div>
+          <div class="gallery-thumbs" id="thumbs">${tList.map((src, i) => `<button class="thumb ${i === 0 ? 'active' : ''}" data-i="${i}"><img src="${src}"></button>`).join('')}</div>
+        </div>
+        <div class="product-info">
+          <div>
+            <h1 class="product-title">${active.name}</h1>
+            <div class="price-row">
+              <span class="price-original">${formatPrice(active.originalPrice)}</span>
+              <span class="price-sale">${formatPrice(active.salePrice)}</span>
+              ${discount > 0 ? `<span class="discount-badge">${discount}% 할인</span>` : ''}
+            </div>
+            
+            <table class="specs-table">
+              <tbody>
+                <tr><th>용량</th><td>${active.specVol || '-'}</td></tr>
+                <tr><th>소재</th><td>${active.specMat || '-'}</td></tr>
+                <tr><th>색상</th><td>${active.specColor || '-'}</td></tr>
+                <tr><th>제품구성</th><td>${active.specQty || '-'}</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <button id="buyBtn" class="buy-btn">구매하기</button>
+        </div>
+      </div>
+    </div>
+    <div class="detail-section card card-pad">
+      <h2 class="section-title">상품 상세 정보</h2>
+      <div class="detail-images-wrap">
+        ${dList.map(src => `<img src="${src}" alt="상세이미지">`).join('')}
+        ${dList.length === 0 ? `<p style="color:var(--muted)">등록된 상세 이미지가 없습니다.</p>` : ''}
+      </div>
+    </div>
+  `;
+
+                document.querySelectorAll('#thumbs .thumb').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('#thumbs .thumb').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        document.getElementById('mainImg').src = tList[+btn.dataset.i];
+                    });
+                });
+
+                const buyBtn = document.getElementById('buyBtn');
+                if (buyBtn) buyBtn.onclick = () => openPurchaseModal();
+            }
+
+            function openPurchaseModal() { document.getElementById('purchaseModal').classList.add('show'); }
+            function closePurchaseModal() { document.getElementById('purchaseModal').classList.remove('show'); }
+            window.closePurchaseModal = closePurchaseModal;
+
+            document.getElementById('orderForm').addEventListener('submit', e => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+                if (!currentActive) return;
+                const order = {
+                    id: 'o' + Date.now(), productId: currentActive.id,
+                    name: fd.get('name').trim(), phone: fd.get('phone').trim(), address: fd.get('address').trim(),
+                    qty: Number(fd.get('qty')), payment: '무통장', depositor: fd.get('depositor').trim(),
+                    orderedAt: Date.now(), status: '입금확인중'
+                };
+                const orders = JSON.parse(localStorage.getItem('kg_orders') || '[]'); orders.unshift(order);
+                localStorage.setItem('kg_orders', JSON.stringify(orders));
+                closePurchaseModal(); e.target.reset(); showToast('주문이 접수되었습니다');
+                renderAdminAll();
+            });
+
+            function setupImageUpload(inputEl, previewEl, counterEl, storageArr, maxCount) {
+                if (!inputEl) return;
+                inputEl.addEventListener('change', async e => {
+                    const files = Array.from(e.target.files);
+                    const available = maxCount - storageArr.length;
+                    const toAdd = files.slice(0, available);
+
+                    for (const file of toAdd) {
+                        const data = await new Promise(res => {
+                            const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(file);
+                        });
+                        storageArr.push(data);
+                    }
+                    inputEl.value = '';
+                    renderPreviews(previewEl, counterEl, storageArr, maxCount);
+                });
+            }
+
+            function renderPreviews(previewEl, counterEl, storageArr, maxCount) {
+                if (!previewEl) return;
+                previewEl.innerHTML = '';
+                counterEl.textContent = `${storageArr.length}/${maxCount}`;
+
+                storageArr.forEach((data, idx) => {
+                    const div = document.createElement('div'); div.className = 'preview-item';
+                    div.innerHTML = `<img src="${data}"><button type="button" class="preview-remove">×</button>`;
+                    div.querySelector('button').onclick = () => {
+                        storageArr.splice(idx, 1);
+                        renderPreviews(previewEl, counterEl, storageArr, maxCount);
+                    };
+                    previewEl.appendChild(div);
+                });
+            }
+
+            document.getElementById('productForm').addEventListener('submit', e => {
+                e.preventDefault();
+                const fd = new FormData(e.target);
+
+                const yStart = fd.get('startYear'), mStart = String(fd.get('startMonth')).padStart(2, '0'), dStart = String(fd.get('startDay')).padStart(2, '0');
+                const yEnd = fd.get('endYear'), mEnd = String(fd.get('endMonth')).padStart(2, '0'), dEnd = String(fd.get('endDay')).padStart(2, '0');
+
+                const startDate = new Date(`${yStart}-${mStart}-${dStart}T00:00:00`).getTime();
+                const endDate = new Date(`${yEnd}-${mEnd}-${dEnd}T23:59:59`).getTime();
+
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const pData = {
+                    name: fd.get('name').trim(),
+                    originalPrice: Number(fd.get('originalPrice')),
+                    salePrice: Number(fd.get('salePrice')),
+                    costPrice: Number(fd.get('costPrice')),
+                    specVol: fd.get('specVol').trim(),
+                    specMat: fd.get('specMat').trim(),
+                    specColor: fd.get('specColor').trim(),
+                    specQty: fd.get('specQty').trim(),
+                    startDate, endDate,
+                    thumbs: uploadedThumbs.length ? [...uploadedThumbs] : [PLACEHOLDER],
+                    details: uploadedDetails.length ? [...uploadedDetails] : [PLACEHOLDER]
+                };
+
+                if (editingProductId) {
+                    const idx = products.findIndex(p => p.id === editingProductId);
+                    if (idx >= 0) {
+                        products[idx] = { ...products[idx], ...pData };
+                        localStorage.setItem('kg_products', JSON.stringify(products));
+                        showToast('商品 정보가 수정되었습니다.');
+                    }
+                } else {
+                    pData.id = 'p' + Date.now();
+                    pData.createdAt = Date.now();
+                    products.unshift(pData);
+                    localStorage.setItem('kg_products', JSON.stringify(products));
+                    showToast('신규 제품이 등록되었습니다.');
+                }
+
+                resetForm(); renderProductList(); renderAdminAll(); renderPublic();
+            });
+
+            function resetForm() {
+                document.getElementById('productForm').reset();
+                uploadedThumbs = []; uploadedDetails = [];
+                renderPreviews(document.getElementById('thumbPreviews'), document.getElementById('thumbCounter'), uploadedThumbs, 5);
+                renderPreviews(document.getElementById('detailPreviews'), document.getElementById('detailCounter'), uploadedDetails, 15);
+                editingProductId = null;
+                document.getElementById('productSubmitBtn').textContent = '제품 등록하기';
+                document.getElementById('cancelEditBtn').style.display = 'none';
+            }
+            document.getElementById('cancelEditBtn').onclick = resetForm;
+
+            function renderProductList() {
+                const tbody = document.querySelector('#adminProductListTable tbody'); if (!tbody) return;
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const now = getKSTNow().getTime();
+
+                tbody.innerHTML = products.map(p => {
+                    let status = '예정', badge = 'badge-gray';
+                    if (now >= p.startDate && now <= p.endDate) { status = '진행중'; badge = 'badge-success'; }
+                    else if (now > p.endDate) { status = '종료'; badge = 'badge-warning'; }
+                    return `<tr>
+      <td><strong>${p.name}</strong></td>
+      <td>${formatPrice(p.salePrice)}</td>
+      <td>${formatPrice(p.costPrice)}</td>
+      <td>썸네일 ${p.thumbs?.length || 0}장 / 상세 ${p.details?.length || 0}장</td>
+      <td><span class="badge ${badge}">${status}</span></td>
+      <td>
+        <button class="btn-secondary" style="padding:4px 8px;font-size:12px" onclick="editProduct('${p.id}')">수정</button>
+        <button class="btn-secondary" style="padding:4px 8px;font-size:12px;color:var(--danger)" onclick="deleteProduct('${p.id}')">삭제</button>
+      </td>
+    </tr>`;
+                }).join('') || `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">등록된 상품이 없습니다.</td></tr>`;
+            }
+
+            window.editProduct = function (id) {
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const p = products.find(x => x.id === id); if (!p) return;
+                editingProductId = id;
+                const form = document.getElementById('productForm');
+
+                form.name.value = p.name;
+                form.originalPrice.value = p.originalPrice;
+                form.salePrice.value = p.salePrice;
+                form.costPrice.value = p.costPrice;
+                form.specVol.value = p.specVol || '';
+                form.specMat.value = p.specMat || '';
+                form.specColor.value = p.specColor || '';
+                form.specQty.value = p.specQty || '';
+
+                const sD = new Date(p.startDate);
+                form.startYear.value = sD.getFullYear(); form.startMonth.value = sD.getMonth() + 1; form.startDay.value = sD.getDate();
+                const eD = new Date(p.endDate);
+                form.endYear.value = eD.getFullYear(); form.endMonth.value = eD.getMonth() + 1; form.endDay.value = eD.getDate();
+
+                uploadedThumbs = [...(p.thumbs || [])].filter(x => x !== PLACEHOLDER);
+                uploadedDetails = [...(p.details || [])].filter(x => x !== PLACEHOLDER);
+
+                renderPreviews(document.getElementById('thumbPreviews'), document.getElementById('thumbCounter'), uploadedThumbs, 5);
+                renderPreviews(document.getElementById('detailPreviews'), document.getElementById('detailCounter'), uploadedDetails, 15);
+
+                document.getElementById('productSubmitBtn').textContent = '수정 완료';
+                document.getElementById('cancelEditBtn').style.display = 'inline-block';
+                document.querySelector('[data-view="register"]').click();
+            };
+
+            window.deleteProduct = function (id) {
+                if (!confirm('정말 삭제하시겠습니까?')) return;
+                let products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                products = products.filter(x => x.id !== id);
+                localStorage.setItem('kg_products', JSON.stringify(products));
+                resetForm(); renderProductList(); renderAdminAll(); renderPublic();
+            };
+
+            function renderDashboard() {
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const orders = JSON.parse(localStorage.getItem('kg_orders') || '[]');
+                const now = getKSTNow().getTime();
+
+                // 총 매출 (모든 주문의 매출액 합산)
+                const totalSales = orders.reduce((sum, o) => {
+                    const p = products.find(x => x.id === o.productId); return sum + (p ? p.salePrice * o.qty : 0);
+                }, 0);
+
+                document.getElementById('dash-sales').textContent = formatPrice(totalSales);
+                document.getElementById('dash-active').textContent = products.filter(p => now >= p.startDate && now <= p.endDate).length + '개';
+                document.getElementById('dash-pending').textContent = orders.filter(o => o.status === '입금확인중').length + '건';
+
+                // [수정된 항목] 현재 진행중 공구 상품에 한해, 상태가 '입금완료'인 실구매 총수량 계산
+                const activeProduct = products.find(p => now >= p.startDate && now <= p.endDate);
+                let totalQty = 0;
+                if (activeProduct) {
+                    totalQty = orders
+                        .filter(o => o.productId === activeProduct.id && o.status === '입금완료')
+                        .reduce((sum, o) => sum + o.qty, 0);
+                }
+                document.getElementById('dash-qty').textContent = totalQty + '개';
+
+                const debugEl = document.getElementById('kstDebug');
+                if (debugEl) debugEl.innerHTML = `현재 시스템 시간(KST): ${formatKST(getKSTNow())}`;
+
+                updateDashboardSchedule();
+            }
+
+            function renderAdminPast() {
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]'); const now = getKSTNow().getTime();
+                const past = products.filter(p => p.endDate < now);
+                const tbody = document.querySelector('#adminPastTable tbody'); if (!tbody) return;
+
+                tbody.innerHTML = past.map(p => {
+                    const s = new Date(p.startDate), e = new Date(p.endDate);
+                    return `<tr><td>${p.name}</td><td>${s.getMonth() + 1}/${s.getDate()}~${e.getMonth() + 1}/${e.getDate()}</td><td>${formatPrice(p.salePrice)}</td><td>${formatPrice(p.costPrice)}</td><td>0</td><td><span class="badge badge-warning">종료</span></td></tr>`;
+                }).join('') || `<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">종료된 공구가 없습니다.</td></tr>`;
+            }
+
+            function renderAdminOrders() {
+                const orders = JSON.parse(localStorage.getItem('kg_orders') || '[]');
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const tbody = document.querySelector('#adminOrdersTable tbody'); if (!tbody) return;
+
+                tbody.innerHTML = orders.map(o => {
+                    const p = products.find(x => x.id === o.productId); const d = new Date(o.orderedAt);
+                    return `<tr><td>${d.getMonth() + 1}/${d.getDate()} ${pad(d.getHours())}:${pad(d.getMinutes())}</td><td>${p ? p.name : '-'}</td><td>${o.name}</td><td>${o.depositor}</td><td>${o.phone}</td><td>${o.qty}</td><td>${p ? formatPrice(p.salePrice * o.qty) : '-'}</td><td><span class="badge badge-gray">${o.status}</span></td></tr>`;
+                }).join('') || `<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">접수된 주문이 없습니다.</td></tr>`;
+            }
+
+            function renderSettle() {
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]');
+                const tbody = document.querySelector('#settleTable tbody'); if (!tbody) return;
+                tbody.innerHTML = products.map(p => `<tr><td>${p.name}</td><td>0</td><td>0원</td><td>0원</td></tr>`).join('');
+            }
+
+            function renderPastPublic() {
+                const products = JSON.parse(localStorage.getItem('kg_products') || '[]'); const now = getKSTNow().getTime();
+                const past = products.filter(p => p.endDate < now);
+                const grid = document.getElementById('pastCardsGrid'); if (!grid) return;
+                grid.innerHTML = past.map(p => `<div class="past-card"><div class="past-card-img"><img src="${p.thumbs?.[0] || PLACEHOLDER}"></div><div class="past-card-body"><div class="past-card-name">${p.name}</div><div class="past-card-price">${formatPrice(p.salePrice)}</div></div></div>`).join('') || `<p style="color:var(--muted);grid-column:1/-1;text-align:center;padding:4px">지난 공구 내역이 없습니다.</p>`;
+            }
+
+            function showToast(msg) { const t = document.getElementById('toast'); if (!t) return; t.textContent = msg; t.classList.add('show'); setTimeout(() => t.classList.remove('show'), 2200); }
+
+            document.getElementById('toggle-public').addEventListener('click', () => {
+                document.getElementById('toggle-public').classList.add('active'); document.getElementById('toggle-admin').classList.remove('active');
+                document.getElementById('public-page').hidden = false; document.getElementById('admin-page').hidden = true; renderPublic();
+            });
+            document.getElementById('toggle-admin').addEventListener('click', () => {
+                document.getElementById('toggle-admin').classList.add('active'); document.getElementById('toggle-public').classList.remove('active');
+                document.getElementById('public-page').hidden = true; document.getElementById('admin-page').hidden = false; renderAdminAll();
+            });
+
+            document.querySelectorAll('.subnav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.subnav-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+                    const tab = btn.dataset.tab; document.getElementById('public-active').hidden = tab !== 'active'; document.getElementById('public-past').hidden = tab !== 'past';
+                    if (tab === 'past') renderPastPublic();
+                });
+            });
+
+            document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.querySelectorAll('.admin-nav-btn').forEach(b => b.classList.remove('active')); btn.classList.add('active');
+                    const view = btn.dataset.view; document.querySelectorAll('.admin-view').forEach(v => v.toggle('active', v.id === `admin-${view}`));
+                    if (view === 'dashboard') renderDashboard(); if (view === 'past') renderAdminPast(); if (view === 'orders') renderAdminOrders(); if (view === 'settle') renderSettle(); if (view === 'register') renderProductList();
+                });
+            });
+
+            function renderAdminAll() { renderDashboard(); renderAdminPast(); renderAdminOrders(); renderSettle(); renderProductList(); }
+
+            function populateDates() {
+                const now = new Date(); const years = [2025, 2026, 2027, 2028, 2029, 2030];
+                ['start', 'end'].forEach(prefix => {
+                    const y = document.querySelector(`select[name="${prefix}Year"]`);
+                    const m = document.querySelector(`select[name="${prefix}Month"]`);
+                    const d = document.querySelector(`select[name="${prefix}Day"]`);
+                    if (!y || !m || !d) return;
+                    years.forEach(yr => { const o = document.createElement('option'); o.value = yr; o.textContent = yr + '년'; if (yr === now.getFullYear()) o.selected = true; y.appendChild(o); });
+                    for (let i = 1; i <= 12; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i + '월'; if (i === (now.getMonth() + 1)) o.selected = true; m.appendChild(o); }
+                    for (let i = 1; i <= 31; i++) { const o = document.createElement('option'); o.value = i; o.textContent = i + '일'; if (i === now.getDate()) o.selected = true; d.appendChild(o); }
+                });
+            }
+
+            const mMenu = document.getElementById('mMenu');
+            const sidebar = document.getElementById('adminSidebar');
+            const overlay = document.getElementById('adminOverlay');
+            if (mMenu) {
+                mMenu.onclick = () => { sidebar.classList.toggle('open'); overlay.classList.toggle('show'); };
+                overlay.onclick = () => { sidebar.classList.remove('open'); overlay.classList.remove('show'); };
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                initData(); populateDates(); startClock(); renderPublic();
+                setupImageUpload(document.getElementById('thumbImagesInput'), document.getElementById('thumbPreviews'), document.getElementById('thumbCounter'), uploadedThumbs, 5);
+                setupImageUpload(document.getElementById('detailImagesInput'), document.getElementById('detailPreviews'), document.getElementById('detailCounter'), uploadedDetails, 15);
+            });
+        })();
+    </script>
+</body>
+
+</html>
