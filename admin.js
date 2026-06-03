@@ -453,7 +453,26 @@
         }
     }
 
+    function checkAuth() {
+        if (sessionStorage.getItem('admin_authenticated') === 'true') {
+            return true;
+        }
+        const pw = prompt('관리자 비밀번호를 입력하세요:');
+        if (pw === '4664') {
+            sessionStorage.setItem('admin_authenticated', 'true');
+            return true;
+        } else {
+            alert('비밀번호가 올바르지 않습니다.');
+            location.href = 'index.html';
+            return false;
+        }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        document.body.style.display = 'none';
+        if (!checkAuth()) return;
+        document.body.style.display = '';
+
         populateDates(); startClock(); renderAdminAll();
         
         const catSelect = document.querySelector('select[name="category"]');
