@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>비니비니 공구방 - 관리자 모드</title>
+    <link rel="stylesheet" href="admin.css">
+    <script src="admin.js" defer></script>
+</head>
+
+<body>
+    <div class="app">
+        <header class="header">
+            <div class="container header-inner">
+                <button id="mMenu" class="m-menu">☰</button>
+                <div class="brand"><span>비니비니 공구방</span></div>
+                <div class="toggle-group">
+                    <a href="index.html" id="toggle-public" class="toggle-btn">일반 페이지</a>
+                    <a href="admin.html" id="toggle-admin" class="toggle-btn active">관리자 페이지</a>
+                </div>
+            </div>
+        </header>
+
+        <div id="admin-page" class="page">
+            <div class="admin-layout">
+                <div class="admin-overlay" id="adminOverlay"></div>
+                <aside class="admin-sidebar" id="adminSidebar">
+                    <nav class="admin-nav">
+                        <button class="admin-nav-btn active" data-view="dashboard">대시보드</button>
+                        <button class="admin-nav-btn" data-view="register">제품등록</button>
+                        <button class="admin-nav-btn" data-view="past">지난공구</button>
+                        <button class="admin-nav-btn" data-view="orders">주문관리</button>
+                        <button class="admin-nav-btn" data-view="settle">정산</button>
+                    </nav>
+                </aside>
+                <main class="admin-main">
+                    <div id="admin-dashboard" class="admin-view active">
+                        <h1 style="font-size:24px;font-weight:800;margin:0 0 12px">대시보드</h1>
+                        <div id="kstDebug"
+                            style="background:#eff6ff;border:1px solid #bfdbfe;color:#1e40af;padding:10px 14px;border-radius:12px;font-size:13px;margin-bottom:16px">
+                        </div>
+                        <div id="nextScheduleCard" class="card card-pad" style="margin-bottom:20px"></div>
+                        <div class="dash-grid">
+                            <div class="dash-card">
+                                <div class="dash-label">총 매출</div>
+                                <div class="dash-value" id="dash-sales">0원</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="dash-label">진행중</div>
+                                <div class="dash-value" id="dash-active">0개</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="dash-label">대기 주문</div>
+                                <div class="dash-value" id="dash-pending">0건</div>
+                            </div>
+                            <div class="dash-card">
+                                <div class="dash-label">실구매 총 수량</div>
+                                <div class="dash-value" id="dash-qty">0개</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-register" class="admin-view">
+                        <h1 style="font-size:24px;font-weight:800;margin:0 0 20px">제품 등록</h1>
+                        <div class="card card-pad">
+                            <form id="productForm" class="form-grid">
+                                <div class="form-grid two">
+                                    <div class="form-field">
+                                        <label class="form-label">상품명 *</label>
+                                        <input class="form-input" name="name" required placeholder="예: 프리미엄 텀블러 500ml 단품 세트">
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">소비자가 (원) *</label>
+                                        <input class="form-input" name="originalPrice" type="number" min="0" required placeholder="29000">
+                                    </div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field">
+                                        <label class="form-label">판매가 (원) *</label>
+                                        <input class="form-input" name="salePrice" type="number" min="0" required placeholder="18900">
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">제품원가 (원) *</label>
+                                        <input class="form-input" name="costPrice" type="number" min="0" required placeholder="9500">
+                                    </div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field">
+                                        <label class="form-label">용량 *</label>
+                                        <input class="form-input" name="specVol" required placeholder="500ml">
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">소재 *</label>
+                                        <input class="form-input" name="specMat" required placeholder="스테인리스 316">
+                                    </div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field">
+                                        <label class="form-label">색상 *</label>
+                                        <input class="form-input" name="specColor" required placeholder="코랄핑크 / 스카이블루">
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">제품구성 *</label>
+                                        <input class="form-input" name="specQty" required placeholder="예: 본품 1개 + 전용 파우치 1개">
+                                    </div>
+                                </div>
+                                <div class="form-grid two">
+                                    <div class="form-field">
+                                        <label class="form-label">시작일 (자정 00:00 자동시작) *</label>
+                                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                                            <select name="startYear" class="form-select" required></select>
+                                            <select name="startMonth" class="form-select" required></select>
+                                            <select name="startDay" class="form-select" required></select>
+                                        </div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">종료일 (밤 23:59:59 자동마감) *</label>
+                                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">
+                                            <select name="endYear" class="form-select" required></select>
+                                            <select name="endMonth" class="form-select" required></select>
+                                            <select name="endDay" class="form-select" required></select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="image-upload-box">
+                                    <div class="form-field">
+                                        <label class="form-label">썸네일 이미지 <span id="thumbCounter" style="font-weight:400;color:var(--muted)">0/5</span> *</label>
+                                        <label class="image-upload">
+                                            <input id="thumbImagesInput" type="file" accept=".jpg,.jpeg,.png,.webp" multiple hidden>
+                                            <div>클릭하여 썸네일 등록 (최대 5장)</div>
+                                        </label>
+                                        <div id="thumbPreviews" class="image-previews"></div>
+                                    </div>
+                                    <div class="form-field">
+                                        <label class="form-label">상품 상세 이미지 <span id="detailCounter" style="font-weight:400;color:var(--muted)">0/15</span> *</label>
+                                        <label class="image-upload">
+                                            <input id="detailImagesInput" type="file" accept=".jpg,.jpeg,.png,.webp" multiple hidden>
+                                            <div>클릭하여 상세이미지 등록 (최대 15장)</div>
+                                        </label>
+                                        <div id="detailPreviews" class="image-previews"></div>
+                                    </div>
+                                </div>
+
+                                <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px">
+                                    <button type="button" id="cancelEditBtn" class="btn-secondary" style="display:none">취소</button>
+                                    <button type="submit" class="btn-primary" id="productSubmitBtn">제품 등록하기</button>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="card card-pad" style="margin-top:24px">
+                            <h3 style="margin:0 0 16px;font-weight:800">등록된 상품 목록</h3>
+                            <div class="table-wrap">
+                                <table class="admin-table" id="adminProductListTable">
+                                    <thead>
+                                        <tr>
+                                            <th>상품명</th>
+                                            <th>판매가</th>
+                                            <th>원가</th>
+                                            <th>썸네일/상세</th>
+                                            <th>상태</th>
+                                            <th>액션</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="admin-past" class="admin-view">
+                        <h1 style="font-size:24px;font-weight:800;margin:0 0 20px">지난 공구</h1>
+                        <div class="table-wrap">
+                            <table class="admin-table" id="adminPastTable">
+                                <thead>
+                                    <tr>
+                                        <th>상품명</th>
+                                        <th>기간</th>
+                                        <th>판매가</th>
+                                        <th>원가</th>
+                                        <th>판매수량</th>
+                                        <th>상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="admin-orders" class="admin-view">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                            <h1 style="font-size:24px;font-weight:800;margin:0">주문 관리</h1>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="admin-table" id="adminOrdersTable">
+                                <thead>
+                                    <tr>
+                                        <th>주문일시</th>
+                                        <th>상품</th>
+                                        <th>주문자</th>
+                                        <th>입금자명</th>
+                                        <th>연락처</th>
+                                        <th>수량</th>
+                                        <th>금액</th>
+                                        <th>입금상태</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div id="admin-settle" class="admin-view">
+                        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+                            <h1 style="font-size:24px;font-weight:800;margin:0">정산</h1>
+                            <div style="background:white;padding:10px 16px;border-radius:12px;border:1px solid var(--border)">
+                                총 이익 <strong id="totalProfit" style="font-size:20px;color:var(--primary);margin-left:8px">0원</strong>
+                            </div>
+                        </div>
+                        <div class="table-wrap">
+                            <table class="admin-table" id="settleTable">
+                                <thead>
+                                    <tr>
+                                        <th>상품명</th>
+                                        <th>판매수량</th>
+                                        <th>매출</th>
+                                        <th>이익</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <footer class="footer">© 2026 비니비니 공구방 • 매주 공동구매 플랫폼</footer>
+    </div>
+
+    <div id="toast" class="toast"></div>
+</body>
+
+</html>
